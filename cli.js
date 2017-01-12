@@ -1,3 +1,4 @@
+#!/usr/bin/env node --harmony
 const tests = require('.')
 
 if (require.main === module) {
@@ -11,10 +12,12 @@ if (require.main === module) {
 
 module.exports = cli
 async function cli(argv = process.argv) {
-	console.log('activitypub-tests')
-	const activityPubUrl = 'http://distbin.com'
+	const activityPubUrl = process.argv[2];
+	if ( ! activityPubUrl) {
+		throw new Error("Please run with cli arg of activityPubUrl like `./cli.js http://distbin.com`")
+	}
 	const runner = tests.runner({ activityPubUrl })
 	const results = await runner() 
-	console.log('results')
+	// console.log('results', results)
 	console.log(JSON.stringify(results, null, 2))
 }
